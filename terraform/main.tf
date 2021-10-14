@@ -8,7 +8,7 @@ terraform {
   }
   backend "azurerm" {
         resource_group_name  = "tfstate"
-        storage_account_name = "tfstate32554"
+        storage_account_name = "tfstate32554" # This is a globally unique account
         container_name       = "tfstate"
         key                  = "terraform.tfstate"
     }
@@ -172,6 +172,23 @@ resource "azurerm_linux_virtual_machine" "mvp_web_app_vm" {
     boot_diagnostics {
         storage_account_uri = azurerm_storage_account.mvp_web_app_storageaccount.primary_blob_endpoint
     }
+    tags = {
+        environment = "MVP web App"
+    }
+}
+
+resource "azurerm_virtual_machine_extension" "chefSoloInstall" { # chose this cause quick to dev, other options: use `custom_data` to run `cloud-init` OR pre building image with packer.
+    name                 = "chefSoloDeploy"
+    virtual_machine_id   = azurerm_linux_virtual_machine.mvp_web_app_vm.id
+    publisher            = "Microsoft.Azure.Extensions"
+    type                 = "CustomScript"
+    type_handler_version = "2.0"
+
+    settings = <<SETTINGS
+        {
+            "commandToExecute": "wget https://packages.chef.io/files/stable/chef-workstation/21.9.613/ubuntu/18.04/chef-workstation_21.9.613-1_amd64.deb && dpkg -i chef-workstation_21.9.613-1_amd64.deb"
+        }
+    SETTINGS
 
     tags = {
         environment = "MVP web App"
