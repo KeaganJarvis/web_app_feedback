@@ -139,6 +139,19 @@ output "tls_private_key" { # TODO is it necessary to display this?
     sensitive = true
 }
 
+data "template_file" "cloud-init-template" {
+  template = "${file("cloud-init.tpl")}"
+
+}
+data "template_cloudinit_config" "cloud-init-config" {
+  gzip          = true
+  base64_encode = true
+  part {
+    content_type = "text/cloud-config"
+    content      = "${data.template_file.cloud-init-template.rendered}"
+  }
+}
+
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "mvp_web_app_vm" {
     name                  = "VMForWebAppMVP"
@@ -160,6 +173,8 @@ resource "azurerm_linux_virtual_machine" "mvp_web_app_vm" {
         version   = "latest"
     }
 
+    custom_data = "${data.template_cloudinit_config.cloud-init-config.rendered}"
+
     computer_name  = "VMForWebAppMVP"
     admin_username = "azureuser" # leaving this as generic user name, TODO consider changing?
     disable_password_authentication = true
@@ -177,20 +192,21 @@ resource "azurerm_linux_virtual_machine" "mvp_web_app_vm" {
     }
 }
 
-resource "azurerm_virtual_machine_extension" "chefSoloInstall" { # chose this cause quick to dev, other options: use `custom_data` to run `cloud-init` OR pre building image with packer.
-    name                 = "chefSoloDeploy"
-    virtual_machine_id   = azurerm_linux_virtual_machine.mvp_web_app_vm.id
-    publisher            = "Microsoft.Azure.Extensions"
-    type                 = "CustomScript"
-    type_handler_version = "2.0"
 
-    settings = <<SETTINGS
-        {
-            "commandToExecute": "wget https://packages.chef.io/files/stable/chef-workstation/21.9.613/ubuntu/18.04/chef-workstation_21.9.613-1_amd64.deb && dpkg -i chef-workstation_21.9.613-1_amd64.deb"
-        }
-    SETTINGS
+# resource "azurerm_virtual_machine_extension" "chefSoloInstall" { # chose this cause quick to dev, other options: use `custom_data` to run `cloud-init` OR pre building image with packer.
+#     name                 = "chefSoloDeploy"
+#     virtual_machine_id   = azurerm_linux_virtual_machine.mvp_web_app_vm.id
+#     publisher            = "Microsoft.Azure.Extensions"
+#     type                 = "CustomScript"
+#     type_handler_version = "2.0"
 
-    tags = {
-        environment = "MVP web App"
-    }
-}
+#     settings = <<SETTINGS
+#         {
+#             "commandToExecute": "wget https://packages.chef.io/files/stable/chef-workstation/21.9.613/ubuntu/18.04/chef-workstation_21.9.613-1_amd64.deb && dpkg -i chef-workstation_21.9.613-1_amd64.deb"
+#         }
+#     SETTINGS
+
+#     tags = {
+#         environment = "MVP web App"
+#     }
+# }
