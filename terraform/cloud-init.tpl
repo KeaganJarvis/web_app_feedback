@@ -56,8 +56,8 @@
 runcmd: # janky way to install and call chef when `chef` stanza was failing above
 - wget https://packages.chef.io/files/stable/chef-workstation/21.9.613/ubuntu/18.04/chef-workstation_21.9.613-1_amd64.deb
 - dpkg -i chef-workstation_21.9.613-1_amd64.deb
-- git clone https://github.com/KeaganJarvis/web_app_feedback.git /web_app_feedback
 - sudo chef-client --chef-license accept
+- git clone https://github.com/KeaganJarvis/web_app_feedback.git /web_app_feedback
 - cd /web_app_feedback/chef/cookbooks/
 - sudo chef-client --local-mode --override-runlist main
 
