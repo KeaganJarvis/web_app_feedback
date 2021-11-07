@@ -20,7 +20,7 @@ execute "Create web_app_py_virtual_env" do
 end
 
 execute "Install python libraries" do
-    command "/web_app_venv/bin/pip install -r /web_app_feedback/server/requirements.txt"
+    command "/web_app_venv/bin/pip install -r /web_app_feedback/web_app/requirements.txt"
 end
 # execute "Install perl web framework" do
 #     command "cpanm Dancer2"
