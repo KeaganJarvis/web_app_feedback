@@ -21,7 +21,6 @@ def submit_comment():
     is_positive = request.values.get("is_positive") == 'true' # TODO JS request coming through on server as str, even though is bool in client obj
     comment = request.values.get("comment")
     Comments.create(comment=comment,is_positive=is_positive)
-    import pudb; pudb.set_trace()
     return json.dumps({'result':'success'}), 200
 
 if __name__ == '__main__':
