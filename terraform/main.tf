@@ -168,8 +168,8 @@ resource "azurerm_linux_virtual_machine" "mvp_web_app_vm" {
 
     source_image_reference {
         publisher = "Canonical"
-        offer     = "UbuntuServer"
-        sku       = "18.04-LTS" # 20.04 gave error : The platform image 'Canonical:UbuntuServer:20.04-LTS:latest' is not available.
+        offer     = "0001-com-ubuntu-server-focal" # had to use this strange offering because of this advice https://github.com/Azure/azure-cli/issues/13320
+        sku       = "20_04-lts" # 20.04 gave error : The platform image 'Canonical:UbuntuServer:20.04-LTS:latest' is not available.
         version   = "latest"
     }
 
