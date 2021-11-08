@@ -42,7 +42,7 @@ Total negative: {results['num_of_negative']}
         "name": f"Daily summary from feedback site for {todays_date}",
         "notes": task_description,
         "resource_subtype": "default_task",
-        "projects": ["1201154200912959"]
+        "projects": ["1201338169681489"]
     }
     asana_client.tasks.create_task(data)
 
