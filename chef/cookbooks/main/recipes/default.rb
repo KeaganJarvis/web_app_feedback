@@ -37,6 +37,14 @@ file "/etc/nginx/sites-available/application" do
     action :create
 end
 
+file "/etc/nginx/sites-available/default" do
+    action :delete
+end
+
+file "/etc/nginx/sites-enabled/default" do
+    action :delete
+end
+
 systemd_unit 'nginx.service' do
     action :restart
 end
