@@ -1,3 +1,4 @@
+apt_update
 package "git-core"
 package "nginx"
 # package "make"
