@@ -133,9 +133,13 @@ resource "tls_private_key" "mvp_web_app_ssh" {
   algorithm = "RSA"
   rsa_bits = 4096
 }
-output "tls_private_key" { # TODO is it necessary to display this?
+output "public_ip_address" {
+    value = azurerm_public_ip.mvp_web_app_publicip.ip_address
+}
+
+output "tls_private_key" {
     value = tls_private_key.mvp_web_app_ssh.private_key_pem
-    sensitive = true
+    sensitive = true # can not make this an output without this (can later display with `raw`)
 }
 
 data "template_file" "cloud-init-template" {
