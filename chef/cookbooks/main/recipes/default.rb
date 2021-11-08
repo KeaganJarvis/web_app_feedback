@@ -21,14 +21,6 @@ end
 # get nginx setup correctly before doing certbot stuff so that it auto fixes /etc/nginx/sites-enabled/application
 # this must come after installing nginx
 # TODO Should it use the nginx cookbook? If yes then use
-file "/etc/nginx/sites-enabled/application" do
-    owner 'root'
-    group 'root'
-    mode 0644
-    content ::File.open("/web_app_feedback/nginx/application").read
-    action :create
-end
-
 file "/etc/nginx/sites-available/application" do
     owner 'root'
     group 'root'
@@ -37,11 +29,15 @@ file "/etc/nginx/sites-available/application" do
     action :create
 end
 
+link "/etc/nginx/sites-available/application" do
+    to "/etc/nginx/sites-enabled/application"
+end
+
 file "/etc/nginx/sites-available/default" do
     action :delete
 end
 
-file "/etc/nginx/sites-enabled/default" do
+link "/etc/nginx/sites-enabled/default" do
     action :delete
 end
 
