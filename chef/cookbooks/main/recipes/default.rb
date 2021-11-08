@@ -18,6 +18,27 @@ end
 # TODO separate the next steps into a separate file/recipe
 
 # get nginx setup correctly before doing certbot stuff so that it auto fixes /etc/nginx/sites-enabled/application
+# this must come after installing nginx
+# TODO Should it use the nginx cookbook? If yes then use
+file "/etc/nginx/sites-enabled/application" do
+    owner 'root'
+    group 'root'
+    mode 0644
+    content ::File.open("/web_app_feedback/nginx/application").read
+    action :create
+end
+
+file "/etc/nginx/sites-available/application" do
+    owner 'root'
+    group 'root'
+    mode 0644
+    content ::File.open("/web_app_feedback/nginx/application").read
+    action :create
+end
+
+systemd_unit 'nginx.service' do
+    action :restart
+end
 
 # certbot is recommended to use the snap install rather for 20.04
 # attempts at using `snap_package` was giving errors TODO say this?
@@ -40,10 +61,6 @@ execute "Install python libraries" do
     command "/web_app_venv/bin/pip install -r /web_app_feedback/web_app/requirements.txt"
 end
 
-
-# ensure to run ln -s /etc/nginx/sites-available/application /etc/nginx/sites-enabled when setting up nginx
-# and systemctl restart nginx afterwards
-# Should it use the nginx cookbook? If yes then use
 
 # necessary for uwsgi logging:
 directory '/var/log/uwsgi' do
@@ -74,7 +91,8 @@ end
 
 
 
-
+# chmod the asana script to be +x
+# add asana script to cron
 
 
 
