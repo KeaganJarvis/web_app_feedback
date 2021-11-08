@@ -29,17 +29,18 @@ file "/etc/nginx/sites-available/application" do
     action :create
 end
 
-link "/etc/nginx/sites-available/application" do
-    to "/etc/nginx/sites-enabled/application"
+link "/etc/nginx/sites-enabled/application" do
+    to "/etc/nginx/sites-available/application"
+end
+
+link "/etc/nginx/sites-enabled/default" do
+    action :delete
 end
 
 file "/etc/nginx/sites-available/default" do
     action :delete
 end
 
-link "/etc/nginx/sites-enabled/default" do
-    action :delete
-end
 
 systemd_unit 'nginx.service' do
     action :restart
