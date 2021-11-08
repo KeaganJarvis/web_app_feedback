@@ -37,11 +37,14 @@
     // form.style.display = 'hidden';
     // document.body.appendChild(form)
     // form.submit();
+    // included jquery to get this async ajax posting call
     $.ajax({url:'/submit_comment',
                     method: 'POST',
                     dataType: 'json',
                     timeout: 180000,
                     data:data_to_be_posted})
+    window.location.href = '/thanks';
+
    }
  </script>
 
