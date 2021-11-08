@@ -142,10 +142,18 @@ output "tls_private_key" {
     sensitive = true # can not make this an output without this (can later display with `raw`)
 }
 
+variable "asana_key" {
+  type        = string
+  default = "No key :("
+}
+
 data "template_file" "cloud-init-template" {
   template = "${file("cloud-init.tpl")}"
-
+  vars = {
+    asana_key = var.asana_key
+  }
 }
+
 data "template_cloudinit_config" "cloud-init-config" {
   gzip          = true
   base64_encode = true
