@@ -19,7 +19,7 @@ provider "azurerm" {
 
 # Create a resource group if it doesn't exist
 resource "azurerm_resource_group" "mvp_web_app_group" {
-    name     = "myResourceGroup"
+    name     = "mvp_web_app_Resource_group"
     location = "eastus"
 
     tags = {
@@ -29,7 +29,7 @@ resource "azurerm_resource_group" "mvp_web_app_group" {
 
 # Create virtual network
 resource "azurerm_virtual_network" "mvp_web_app_network" {
-    name                = "myVnet"
+    name                = "VnetForMVP"
     address_space       = ["10.0.0.0/16"]
     location            = "eastus"
     resource_group_name = azurerm_resource_group.mvp_web_app_group.name
@@ -41,7 +41,7 @@ resource "azurerm_virtual_network" "mvp_web_app_network" {
 
 # Create subnet
 resource "azurerm_subnet" "mvp_web_app_subnet" {
-    name                 = "mySubnet"
+    name                 = "subnetForMVP"
     resource_group_name  = azurerm_resource_group.mvp_web_app_group.name
     virtual_network_name = azurerm_virtual_network.mvp_web_app_network.name
     address_prefixes       = ["10.0.1.0/24"]
@@ -49,7 +49,7 @@ resource "azurerm_subnet" "mvp_web_app_subnet" {
 
 # Create public IPs
 resource "azurerm_public_ip" "mvp_web_app_publicip" {
-    name                         = "myPublicIP"
+    name                         = "publicIPforMVP"
     location                     = "eastus"
     resource_group_name          = azurerm_resource_group.mvp_web_app_group.name
     allocation_method            = "Dynamic"
@@ -61,7 +61,7 @@ resource "azurerm_public_ip" "mvp_web_app_publicip" {
 
 # Create Network Security Group and rule
 resource "azurerm_network_security_group" "mvp_web_app_nsg" {
-    name                = "myNetworkSecurityGroup"
+    name                = "networkSecurityGroupForMVP"
     location            = "eastus"
     resource_group_name = azurerm_resource_group.mvp_web_app_group.name
 
@@ -83,12 +83,12 @@ resource "azurerm_network_security_group" "mvp_web_app_nsg" {
 
 # Create network interface
 resource "azurerm_network_interface" "mvp_web_app_nic" {
-    name                      = "myNIC"
+    name                      = "NICforMVP"
     location                  = "eastus"
     resource_group_name       = azurerm_resource_group.mvp_web_app_group.name
 
     ip_configuration {
-        name                          = "myNicConfiguration"
+        name                          = "NicConfigurationForMVP"
         subnet_id                     = azurerm_subnet.mvp_web_app_subnet.id
         private_ip_address_allocation = "Dynamic"
         public_ip_address_id          = azurerm_public_ip.mvp_web_app_publicip.id
@@ -156,15 +156,15 @@ data "template_cloudinit_config" "cloud-init-config" {
 }
 
 # Create virtual machine
-resource "azurerm_linux_virtual_machine" "mvp_web_app_vm" {
-    name                  = "VMForWebAppMVP"
+resource "azurerm_linux_virtual_machine" "web_app_mvp_vm" {
+    name                  = "WebAppMVP-VM"
     location              = "eastus"
     resource_group_name   = azurerm_resource_group.mvp_web_app_group.name
     network_interface_ids = [azurerm_network_interface.mvp_web_app_nic.id]
     size                  = "Standard_DS1_v2"
 
     os_disk {
-        name              = "myOsDisk"
+        name              = "MVPOsDisk"
         caching           = "ReadWrite"
         storage_account_type = "Premium_LRS"
     }
@@ -178,7 +178,7 @@ resource "azurerm_linux_virtual_machine" "mvp_web_app_vm" {
 
     custom_data = "${data.template_cloudinit_config.cloud-init-config.rendered}"
 
-    computer_name  = "VMForWebAppMVP"
+    computer_name  = "WebAppMVP-VM"
     admin_username = "azureuser" # leaving this as generic user name, TODO consider changing?
     disable_password_authentication = true
 
@@ -198,7 +198,7 @@ resource "azurerm_linux_virtual_machine" "mvp_web_app_vm" {
 
 # resource "azurerm_virtual_machine_extension" "chefSoloInstall" { # chose this cause quick to dev, other options: use `custom_data` to run `cloud-init` OR pre building image with packer.
 #     name                 = "chefSoloDeploy"
-#     virtual_machine_id   = azurerm_linux_virtual_machine.mvp_web_app_vm.id
+#     virtual_machine_id   = azurerm_linux_virtual_machine.web_app_mvp_vm.id
 #     publisher            = "Microsoft.Azure.Extensions"
 #     type                 = "CustomScript"
 #     type_handler_version = "2.0"
