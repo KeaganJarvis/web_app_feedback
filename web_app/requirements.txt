@@ -1,2 +1,4 @@
-peewee
+asana
 Flask
+peewee
+uWSGI

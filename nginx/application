@@ -1,0 +1,9 @@
+server {
+    listen 80;
+    server_name web-app-feedback.space www.web-app-feedback.space;
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:/web_app_feedback/web_app/application.sock;
+    }
+}
