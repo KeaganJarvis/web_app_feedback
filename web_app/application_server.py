@@ -19,9 +19,18 @@ def submit_comment():
     is_positive = request.values.get("is_positive") == 'true' # TODO JS request coming through on server as str, even though is bool in client obj
     user_agent = request.headers.get('User-Agent')
     comment = request.values.get("comment")
+    url = request.values.get("url")
+    search_terms = request.values.get("terms")
+    email = request.values.get("email")
     # Data validation would go here against `comment` to prevent injections, for now trusting the ORM
     try:
-        Comments.create(comment=comment,is_positive=is_positive)
+        Comments.create(comment=comment,
+                        is_positive=is_positive,
+                        user_agent = user_agent,
+                        url = url,
+                        search_terms = search_terms,
+                        email = email
+                        )
     except: # blanket `except` for now
         # TODO log the exception
         return json.dumps({'result':'error'}), 400

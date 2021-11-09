@@ -1,20 +1,64 @@
 <!DOCTYPE html>
 <html>
  <head>
-  <h1>How has your experience been with our site?<h1>
+    <style>
+      .centre {
+        margin: auto;
+        width: 50%;
+        /* border: 3px solid #73AD21; */
+        padding: 10px;
+      }
+      .needed label {
+        font-size: 30px;
+      }
+      .optional label {
+        font-size: 20px;
+      }
+    </style>
+
  </head>
  <body>
-  <select id="is_positive" name="is_positive">
-    <option value="base">Choose here</option>
-    <option value=true>Positive</option>
-    <option value=false>Negative</option>
-  </select><br><br>
-  <label for="fname">Your Comments:</label><br><br>
-  <!-- <input type="textarea" id="comment" name="comment"><br><br> -->
-  <textarea id="comment" name="comment" rows="20" cols="50"></textarea><br><br>
-  <!-- <input type="submit" value="Submit"> -->
-  <button type="button" onclick="proceed();">Submit</button>
+   <div class="centre">
+    <h1>How has your experience been with our site?<h1>
+    <div class="needed">
+      <select id="is_positive" name="is_positive">
+        <option value="base">Choose here</option>
+        <option value=true>Positive</option>
+        <option value=false>Negative</option>
+      </select><br><br>
+    </div>
+    <div class="needed">
+      <label id="lblComments">Your Comments:</label><br><br>
+      <textarea id="comment" name="comment" rows="20" cols="50"></textarea>
+    </div>
+    <div class="optional">
+      <label id="lblAdditional">Optional additional info:</label>
+      <div></div>
+    </div>
+    <div class="optional">
+      <label id="lblURL">Url that you were on at the time:</label>
+      <div>
+        <textarea id="url" name="url" rows="1" cols="50"></textarea>
+      </div>
+    </div>
+    <div class="optional">
+      <label id="lblTerms">Search terms used:</label>
+      <div>
+        <textarea id="terms" name="terms" rows="1" cols="50"></textarea>
+      </div>
+    </div><div class="optional">
+      <label id="lblEmail">Your Email address:</label>
+      <div>
+        <textarea id="email" name="email" rows="1" cols="50"></textarea>
+      </div>
+    </div>
+    <div class="optional">
+    </div>
+    <div class="optional">
+    </div>
 
+    <button type="button" onclick="proceed();">Submit</button>
+  </div>
  </body>
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
  <script>
@@ -26,22 +70,21 @@
     }
     var is_positive = (is_positive === 'true');
     var comment = document.getElementById("comment").value;
+    var url = document.getElementById("url").value;
+    var terms = document.getElementById("terms").value;
+    var email = document.getElementById("email").value;
     data_to_be_posted = {
       'is_positive' : is_positive,
-      'comment': comment
+      'comment': comment,
+      'url': url,
+      'terms': terms,
+      'email': email,
     }
-    console.log(data_to_be_posted)
-    // var form = document.createElement('form');
-    // form.setAttribute('method', 'post');
-    // form.setAttribute('action', '/submit_comment');
-    // form.style.display = 'hidden';
-    // document.body.appendChild(form)
-    // form.submit();
-    // included jquery to get this async ajax posting call
+    // jquery was loaded in order to do this simple async post below
     $.ajax({url:'/submit_comment',
                     method: 'POST',
                     dataType: 'json',
-                    timeout: 180000,
+                    timeout: 60,
                     data:data_to_be_posted})
     window.location.href = '/thanks';
 

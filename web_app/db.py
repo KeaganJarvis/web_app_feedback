@@ -11,6 +11,10 @@ class BaseModel(Model):
 class Comments(BaseModel):
     comment = CharField()
     is_positive = BooleanField()
+    user_agent = CharField()
+    url = CharField()
+    search_terms = CharField()
+    email = CharField()
     creation_timestamp = DateTimeField(default=datetime.datetime.now)
 
 db.connect()
