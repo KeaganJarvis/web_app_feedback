@@ -46,8 +46,8 @@ systemd_unit 'nginx.service' do
     action :restart
 end
 
-# certbot is recommended to use the snap install rather for 20.04
-# attempts at using `snap_package` was giving errors TODO say this?
+# certbot is recommended to use the snap install for 20.04
+# attempts at using chef's `snap_package` was giving failing therefore calling command directly
 execute "Install certbot" do
     command "snap install certbot --classic"
 end
@@ -91,7 +91,9 @@ systemd_unit 'uwsgi-application.service' do
             Install: {
               WantedBy: 'multi-user.target',
             } })
-    action [:create, :enable, :start] # TODO :start OR :restart ?
+    action [:create, :enable, :restart]
+    # :restart rather than :start chosen in step above for the case where new server code has been pulled
+    # and that new code needs to be loaded into the service
     # user ubunutu TODO get correct user
 end
 
