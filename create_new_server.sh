@@ -43,7 +43,7 @@ create_server()
     echo "The server has the following public ip:"
     # terraform apply -target=output.public_ip_address
     terraform output public_ip_address # this is the line that makes the double `terraform apply`s necessary above
-    echo "The web site should be availble via http on that IP after approximately 5 mins"
+    echo "The web site should be available via http on that IP after approximately 5 mins"
     echo "FINISHED"
 
     # TODO comment stating that would prefer to use Azure Key Vault or Hashicorp Vault to store secrets like the Asana API key but this is a quick hack
