@@ -99,8 +99,12 @@ end
 file "/web_app_feedback/web_app/post_feedback_to_asana.py" do
     mode 0744
 end
-# chmod the asana script to be +x
-# add asana script to cron
+
+cron 'Daily_asana_report_post' do
+    hour '8'
+    minute '0'
+    command '/web_app_feedback/web_app/post_feedback_to_asana.py'
+  end
 
 
 

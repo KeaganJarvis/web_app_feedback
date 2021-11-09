@@ -28,7 +28,6 @@ def get_results_from_db():
 
 
 def post_results_to_asana(asana_client, results):
-    asana_client = asana.Client.access_token(os.environ['ASANA_ACCESS_TOKEN'])
     task_description = f"""
 Positive comments: {results['percentage_of_positive']}%
 negative comments: {results['percentage_of_negative']}%
@@ -57,7 +56,9 @@ def post_failure_to_asana(asana_client, msg):
     asana_client.tasks.create_task(data)
 
 if __name__ == "__main__":
-    asana_client = asana.Client.access_token(os.environ['ASANA_ACCESS_TOKEN'])
+    with open("/web_app_feedback/web_app/asana.key") as file:
+        asana_key = file.readline().strip()
+    asana_client = asana.Client.access_token(asana_key)
     try:
         results = get_results_from_db()
         post_results_to_asana(asana_client,results)

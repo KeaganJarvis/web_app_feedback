@@ -2,7 +2,7 @@
 from peewee import SqliteDatabase, Model, CharField, BooleanField, DateTimeField
 import datetime
 
-db = SqliteDatabase('application.db')
+db = SqliteDatabase('/web_app_feedback/web_app/application.db')
 
 class BaseModel(Model):
     class Meta:
