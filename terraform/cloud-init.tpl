@@ -6,6 +6,6 @@ runcmd:
 - git clone https://github.com/KeaganJarvis/web_app_feedback.git /web_app_feedback
 - echo ${asana_key} >> /web_app_feedback/web_app/asana.key
 - cd /web_app_feedback/chef/cookbooks/
-- sudo chef-client --local-mode --override-runlist main
+- sudo chef-client --local-mode
 
 output: {all: '| tee -a /var/log/cloud-init-output.log'}

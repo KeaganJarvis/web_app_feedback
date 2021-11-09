@@ -16,11 +16,8 @@ git "/web_app_feedback/" do
     action :sync
 end
 
-# TODO separate the next steps into a separate file/recipe
-
 # get nginx setup correctly before doing certbot stuff so that it auto fixes /etc/nginx/sites-enabled/application
 # this must come after installing nginx
-# TODO Should it use the nginx cookbook? If yes then use
 file "/etc/nginx/sites-available/application" do
     owner 'root'
     group 'root'
@@ -94,9 +91,7 @@ systemd_unit 'uwsgi-application.service' do
     action [:create, :enable, :restart]
     # :restart rather than :start chosen in step above for the case where new server code has been pulled
     # and that new code needs to be loaded into the service
-    # user ubunutu TODO get correct user
 end
-
 
 file "/web_app_feedback/web_app/post_feedback_to_asana.py" do
     mode 0744
@@ -129,22 +124,3 @@ end
 systemd_unit 'monit.service' do
     action :restart
 end
-
-###########
-#OLD:
-# execute "Install perl web framework" do
-#     command "cpanm Dancer2"
-# end
-
-# execute "Install perl ORM" do
-#     command "cpanm Rose::DB::Object"
-# end
-
-# execute "Install ORLite" do # ORLIte won't install cause
-#     command "cpanm ORLite"
-# end
-# knife supermarket install perl
-
-# ensure `make` `gcc` and `cpanm` are installed,
-# use `cpanm Dancer2`
-# cpan_module 'App::Dancer2'
