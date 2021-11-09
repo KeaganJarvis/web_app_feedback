@@ -187,11 +187,11 @@ resource "azurerm_linux_virtual_machine" "web_app_mvp_vm" {
     custom_data = "${data.template_cloudinit_config.cloud-init-config.rendered}"
 
     computer_name  = "WebAppMVP-VM"
-    admin_username = "azureuser" # leaving this as generic user name, TODO consider changing?
+    admin_username = "azureuser" # leaving this as generic user name
     disable_password_authentication = true
 
     admin_ssh_key {
-        username       = "azureuser" # leaving this as generic user name, TODO consider changing?
+        username       = "azureuser" # leaving this as generic user name
         public_key     = tls_private_key.mvp_web_app_ssh.public_key_openssh
     }
 
