@@ -4,14 +4,14 @@
     <style>
       .centre {
         margin: auto;
-        width: 50%;
+        width: 35%;
         /* border: 3px solid #73AD21; */
         padding: 10px;
       }
-      .needed label {
+      .larger_font label {
         font-size: 30px;
       }
-      .optional label {
+      .smaller_font label {
         font-size: 20px;
       }
     </style>
@@ -19,50 +19,45 @@
  </head>
  <body>
    <div class="centre">
-    <h1>How has your experience been with our site?<h1>
-    <div class="needed">
+    <h1>How has your experience been on our site?<h1>
+    <div class="larger_font">
       <select id="is_positive" name="is_positive">
         <option value="base">Choose here</option>
         <option value=true>Positive</option>
         <option value=false>Negative</option>
       </select><br><br>
     </div>
-    <div class="needed">
+    <div class="larger_font">
       <label id="lblComments">Your Comments:</label><br><br>
-      <textarea id="comment" name="comment" rows="20" cols="50"></textarea>
+      <textarea id="comment" name="comment" rows="20" cols="70"></textarea>
     </div>
-    <div class="optional">
+    <div class="larger_font">
       <label id="lblAdditional">Optional additional info:</label>
       <div></div>
     </div>
-    <div class="optional">
+    <div class="smaller_font">
       <label id="lblURL">Url that you were on at the time:</label>
       <div>
-        <textarea id="url" name="url" rows="1" cols="50"></textarea>
+        <textarea id="url" name="url" rows="1" cols="70"></textarea>
       </div>
     </div>
-    <div class="optional">
+    <div class="smaller_font">
       <label id="lblTerms">Search terms used:</label>
       <div>
-        <textarea id="terms" name="terms" rows="1" cols="50"></textarea>
+        <textarea id="terms" name="terms" rows="1" cols="70"></textarea>
       </div>
-    </div><div class="optional">
+    </div><div class="smaller_font">
       <label id="lblEmail">Your Email address:</label>
       <div>
-        <textarea id="email" name="email" rows="1" cols="50"></textarea>
+        <textarea id="email" name="email" rows="1" cols="70"></textarea>
       </div>
     </div>
-    <div class="optional">
-    </div>
-    <div class="optional">
-    </div>
-
-    <button type="button" onclick="proceed();">Submit</button>
+    <button type="button" onclick="submit_data();">Submit</button>
   </div>
  </body>
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
  <script>
-   function proceed () {
+   function submit_data () {
     var is_positive =  document.getElementById("is_positive").value;
     if (is_positive == 'base'){
       alert("Please chose either `Positive` or `Negative` from drop down")
