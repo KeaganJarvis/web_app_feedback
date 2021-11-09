@@ -104,11 +104,29 @@ cron 'Daily_asana_report_post' do
     hour '8'
     minute '0'
     command '/web_app_feedback/web_app/post_feedback_to_asana.py'
-  end
+end
 
+package "monit"
 
+file "/etc/monit/conf.d/uwsgi-application" do
+    owner 'root'
+    group 'root'
+    mode 0644
+    content ::File.open("/web_app_feedback/monit/uwsgi-application").read
+    action :create
+end
 
+file "/etc/monit/conf.d/nginx" do
+    owner 'root'
+    group 'root'
+    mode 0644
+    content ::File.open("/web_app_feedback/monit/nginx").read
+    action :create
+end
 
+systemd_unit 'monit.service' do
+    action :restart
+end
 
 ###########
 #OLD:

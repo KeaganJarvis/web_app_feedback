@@ -1,0 +1,4 @@
+check process uwsgi-application
+    with pidfile /var/run/uwsgi-application.pid
+    start program = "/bin/systemctl start uwsgi-application"
+    stop program  = "/bin/systemctl stop uwsgi-application"
