@@ -19,7 +19,7 @@ create_server()
     # Would prefer to use Azure Key Vault or Hashicorp Vault to store secrets like the Asana API key
     # but this is a quick hack that allows the Asana API key to get passed into the system
     ASANA_KEY="Default_unset_key"
-    while getopts ":k:f" opt; do
+    while getopts ":k:f:h" opt; do
         case $opt in
             k)
             ASANA_KEY="$OPTARG"
@@ -27,12 +27,22 @@ create_server()
             f)
             ASANA_KEY="Forcefully_ran_script_to_not_create_key"
             ;;
+            h)
+            usage
+            ;;
             \?)
             echo "Invalid option: -$OPTARG" >&2
+            exit 200
             ;;
         esac
         done
-    git clone https://github.com/KeaganJarvis/web_app_feedback.git
+    if [ -d "web_app_feedback" ]; then
+        echo "Repo has previously been cloned, therefore pulling to update"
+        git -C web_app_feedback/ pull
+    else
+        echo "Repo does not exist locally, therefore needs to be cloned"
+        git clone https://github.com/KeaganJarvis/web_app_feedback.git
+    fi
     cd web_app_feedback/terraform
     if terraform init; then
         echo "Successfully init'd the terrform state"
@@ -46,13 +56,14 @@ create_server()
         exit 1
     fi
     terraform apply -var="asana_key=${ASANA_KEY}" -auto-approve
+    # NOTE!!!
+    # The randomly assigned public IP is only displayable after this second `terraform apply` below is run
     terraform apply -var="asana_key=${ASANA_KEY}" -target azurerm_linux_virtual_machine.web_app_mvp_vm -auto-approve
-    # TODO the randomly assigned public IP is only displayable after this ^ second `terraform apply` is run
     terraform output -raw tls_private_key
     echo "Successully created server, you can get shell access to it using the private key above^"
     echo "The server has the following public ip:"
     terraform output public_ip_address # this is the line that makes the double `terraform apply`s necessary above
-    echo "The web site should be available via http on that IP after approximately 5 mins"
+    echo "The web site should be available via http on that IP after approximately 3 mins"
     echo "FINISHED"
 
 }
