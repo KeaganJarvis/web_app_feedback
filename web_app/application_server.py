@@ -16,13 +16,15 @@ def get_thanks():
 def submit_comment():
     if request.values.get("is_positive") != 'true' and request.values.get("is_positive") != 'false':
         return json.dumps({'result':'error'}), 400 # covers the case where someone is bypassing website to post to this route/end point.
-    is_positive = request.values.get("is_positive") == 'true' # TODO JS request coming through on server as str, even though is bool in client obj
+    is_positive = request.values.get("is_positive") == 'true' # JS request coming through on server as str, even though is bool in client obj
     user_agent = request.headers.get('User-Agent')
     comment = request.values.get("comment")
     url = request.values.get("url")
     search_terms = request.values.get("terms")
     email = request.values.get("email")
-    # Data validation would go here against `comment` to prevent injections, for now trusting the ORM
+    # Data validation would go here against `comment` `url` `search_terms` and `email`
+    # to prevent injections, for now trusting the ORM
+    # also would do regex for email validation,
     try:
         Comments.create(comment=comment,
                         is_positive=is_positive,
@@ -31,8 +33,8 @@ def submit_comment():
                         search_terms = search_terms,
                         email = email
                         )
-    except: # blanket `except` for now
-        # TODO log the exception
+    except Exception as e: # blanket `except` for now
+        app.logger.exception(e)
         return json.dumps({'result':'error'}), 400
     return json.dumps({'result':'success'}), 200
 

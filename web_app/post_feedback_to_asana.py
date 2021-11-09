@@ -5,8 +5,6 @@ import asana
 import os
 import traceback
 
-# TODO NB how to keep Asana token out of commits? Secrets manager?
-
 def get_results_from_db():
     results = {
         "num_of_positive": 0,
@@ -34,7 +32,6 @@ negative comments: {results['percentage_of_negative']}%
 Total postive: {results['num_of_positive']}
 Total negative: {results['num_of_negative']}
 """
-# TODO check tabbing/formatting of above
     todays_date = datetime.date.today()
     data = {
         "completed": False,
